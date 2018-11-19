@@ -1,7 +1,7 @@
 { stdenv, bash, findutils, fetchurl }:
 
 stdenv.mkDerivation rec {
-    name = "firefox_60_esr";
+    name = "firefox_60_2_2_esr";
     version = "60.2.2esr";
     src = fetchurl {
       url = http://ftp.mozilla.org/pub/firefox/releases/60.2.2esr/linux-x86_64/en-US/firefox-60.2.2esr.tar.bz2;
