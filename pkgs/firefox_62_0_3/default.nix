@@ -21,4 +21,4 @@ stdenv.mkDerivation rec {
     license = licenses.mpl2;
     platforms = platforms.linux;
   };
-};
+}
