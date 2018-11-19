@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Mozilla Firefox 62.0.3";
     homepage = https://www.mozilla.org/en-US/firefox/;
-    license = licenses.mpl2;
+    license = licenses.mpl20;
     platforms = platforms.linux;
   };
 }
