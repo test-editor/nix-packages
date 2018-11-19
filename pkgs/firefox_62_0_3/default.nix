@@ -1,6 +1,6 @@
 { stdenv, bash, findutils, fetchurl }:
 
-firefox_62_0_3 = stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
     name = "firefox_62_0_3";
     version = "62.0.3";
     src = fetchurl {
@@ -15,4 +15,10 @@ firefox_62_0_3 = stdenv.mkDerivation rec {
     find $out -type f -perm -0100 \
         -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \;
    '';
+  meta = with stdenv.lib; {
+    description = "Mozilla Firefox 62.0.3";
+    homepage = https://www.mozilla.org/en-US/firefox/;
+    license = licenses.mpl2;
+    platforms = platforms.linux;
+  };
 };
