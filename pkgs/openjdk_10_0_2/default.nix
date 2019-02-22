@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   sha256_osx   = "77ea7675ee29b85aa7df138014790f91047bfdafbc997cb41a1030a0417356d7";
 
   platform = if stdenv.isDarwin then "osx" else "linux";
-  hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;
+  hash = if stdenv.isDarwin then sha256_osx else sha256_linux;
 
   src = fetchurl {
     url = "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_${platform}-x64_bin.tar.gz";
