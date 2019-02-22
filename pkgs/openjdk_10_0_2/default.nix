@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "OpenJDK 10.0.2, open-source build of the Java Development";
     homepage = https://jdk.java.net/10/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];
   };
 }
