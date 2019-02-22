@@ -1,5 +1,5 @@
-{ stdenv, bash, coreutils, findutils, gawk, gnugrep, nix, fetchurl,
-  glibcLocales, pkgconfig, gnutar, gzip, zlib, glib, glibc, setJavaClassPath, libxslt, libxml2, libX11, libXrender, libXaw, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr, alsaLib, fontconfig, freetype }:
+{ stdenv, bash, coreutils, findutils, gawk, gnugrep, nix, fetchurl, patchelf,
+  glibcLocales, pkgconfig, gnutar, gzip, zlib, glib, glibc, setJavaClassPath, libxslt, libxml2, libX11, libXrender, libXaw, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr, fontconfig, freetype }:
 
 stdenv.mkDerivation rec {
   name = "openjdk_10_0_2";
@@ -14,16 +14,23 @@ stdenv.mkDerivation rec {
     url = "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_${platform}-x64_bin.tar.gz";
     sha256 = hash;
   };
-  buildInputs = [ glibcLocales pkgconfig gnutar gzip zlib stdenv.cc.libc glib setJavaClassPath libxslt libxml2 libX11 libXrender libXaw libXext libXt libXtst libXi libXinerama libXcursor libXrandr alsaLib fontconfig freetype ];
+  buildInputs = [ glibcLocales pkgconfig gnutar gzip zlib stdenv.cc.libc glib setJavaClassPath libxslt libxml2 libX11 libXrender libXaw libXext libXt libXtst libXi libXinerama libXcursor libXrandr fontconfig freetype patchelf ];
   installPhase = ''
     mkdir -p $out
-    cp -r ./* "$out/"
-    # correct interpreter and rpath for binaries to work
-    rpath="${stdenv.lib.makeLibraryPath [ glibcLocales pkgconfig gnutar gzip zlib stdenv.cc.libc glib setJavaClassPath libxslt libxml2 libX11 libXext libXrender libXaw libXt libXtst libXi libXinerama libXcursor libXrandr alsaLib fontconfig freetype ]}:$out/lib/jli:$out/lib/server:$out/lib"
-    find $out -type f -perm -0100 \
-        -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "$rpath" {} \;
-    find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
+
+    if [ "${platform}" == "osx" ]; then
+      cp -r ./Contents/Home/* "$out/"
+
+    elif [ "${platform}" == "linux" ]; then
+      cp -r ./* "$out/"
+
+      # correct interpreter and rpath for binaries to work
+      rpath="${stdenv.lib.makeLibraryPath [ glibcLocales pkgconfig gnutar gzip zlib stdenv.cc.libc glib setJavaClassPath libxslt libxml2 libX11 libXext libXrender libXaw libXt libXtst libXi libXinerama libXcursor libXrandr fontconfig freetype ]}:$out/lib/jli:$out/lib/server:$out/lib"
+      find $out -type f -perm -0100 \
+          -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+          --set-rpath "$rpath" {} \;
+      find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
+    fi
 
     mkdir -p $out/nix-support
     printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
@@ -32,10 +39,11 @@ stdenv.mkDerivation rec {
     export JAVA_HOME=$out
     EOF
   '';
+
   meta = with stdenv.lib; {
     description = "OpenJDK 10.0.2, open-source build of the Java Development";
     homepage = https://jdk.java.net/10/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
