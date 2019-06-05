@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
     name = "firefox_67_0";
     version = "67.0";
     src = fetchurl {
-      url = "http://ftp.mozilla.org/pub/firefox/releases/62.0/linux-x86_64/en-US/firefox-67.0.tar.bz2";
+      url = "http://ftp.mozilla.org/pub/firefox/releases/67.0/linux-x86_64/en-US/firefox-67.0.tar.bz2";
       sha256 = "3c5adf71d655c0ec68c7a8d431a080a0c3aca2e2cc615d4d9bbfc574785b14cd";
     };
 
