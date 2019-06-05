@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
     version = "67.0";
     src = fetchurl {
       url = "http://ftp.mozilla.org/pub/firefox/releases/67.0/linux-x86_64/en-US/firefox-67.0.tar.bz2";
-      sha256 = "3c5adf71d655c0ec68c7a8d431a080a0c3aca2e2cc615d4d9bbfc574785b14cd";
+      sha256 = "c0d5d05c0dbc78e9f1b1bbc2166f1dca6f37067a4b1412743d8bdacdc9ca1117";
     };
 
   installPhase = ''
